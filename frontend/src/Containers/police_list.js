@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux'
 import Table from  "../Components/table";
 import { getPoliceComplaints, updatePoliceComplaintsDatabase } from '../Redux/actions.js'
 
@@ -9,26 +10,21 @@ class PoliceComplaintsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            policeComplaints: 0
+            policeComplaints: []
         }
     }
 
 
     componentDidMount() {
-        getPoliceComplaints();
+        this.props.getPoliceComplaints();
     }
 
 
     render() {
 
-        const complaints = this.props
-        console.log(complaints)
-
-
         return (
             <div>
-                <ul>This works!</ul>
-                <Table />
+                <Table complaints={Object.values(this.props.policeComplaints)}/>
             </div>
         );
     }
@@ -36,4 +32,13 @@ class PoliceComplaintsList extends Component {
 
 }
 
-export default PoliceComplaintsList
+const mapStateToProps = (state) => ({
+    policeComplaints: state.policeComplaints
+})
+
+const mapDispatchToProps = {
+    getPoliceComplaints, updatePoliceComplaintsDatabase
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PoliceComplaintsList)
